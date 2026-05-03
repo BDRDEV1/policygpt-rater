@@ -1,0 +1,42 @@
+{
+  "progressive": {
+    "name": "Progressive",
+    "enabled": true,
+    "loginUrl": "https://www.progressive.com/agent/",
+    "quoteUrl": "https://www.progressive.com/agent/",
+    "lines": ["personal_auto", "commercial_auto", "renters", "flood"],
+    "mode": "realtime"
+  },
+  "national_general": {
+    "name": "National General",
+    "enabled": true,
+    "loginUrl": "",
+    "quoteUrl": "",
+    "lines": ["personal_auto"],
+    "mode": "realtime"
+  },
+  "bristol_west": {
+    "name": "Bristol West",
+    "enabled": true,
+    "loginUrl": "",
+    "quoteUrl": "",
+    "lines": ["personal_auto"],
+    "mode": "realtime"
+  },
+  "dairyland": {
+    "name": "Dairyland",
+    "enabled": true,
+    "loginUrl": "",
+    "quoteUrl": "",
+    "lines": ["personal_auto"],
+    "mode": "realtime"
+  },
+  "amwins": {
+    "name": "Amwins",
+    "enabled": true,
+    "loginUrl": "",
+    "quoteUrl": "",
+    "lines": ["general_liability", "workers_comp", "commercial_auto", "business_owners_policy", "cyber_liability"],
+    "mode": "submission"
+  }
+}
