@@ -6,6 +6,11 @@ const {
   getCredential,
   deleteCredential
 } = require('./src/services/credentials');
+const {
+  getAllCarriers,
+  getCarriersForLine,
+  saveCarrier
+} = require('./src/services/carrierRegistry');
 
 let mainWindow;
 
@@ -33,13 +38,13 @@ app.whenReady().then(() => {
   });
 });
 
-ipcMain.handle('quote:runDemo', async () => {
+ipcMain.handle('quote:runDemo', async (event, lineOfBusiness = 'personal_auto') => {
   try {
-    const result = await runDemoQuote();
+    const result = await runDemoQuote(lineOfBusiness);
 
     return {
       ok: true,
-      message: result.result,
+      message: result.message,
       result
     };
   } catch (error) {
@@ -48,6 +53,31 @@ ipcMain.handle('quote:runDemo', async () => {
       message: error.message || 'Automation failed.'
     };
   }
+});
+
+ipcMain.handle('carriers:getAll', async () => {
+  return getAllCarriers();
+});
+
+ipcMain.handle('carriers:getForLine', async (event, lineOfBusiness) => {
+  return getCarriersForLine(lineOfBusiness);
+});
+
+ipcMain.handle('carriers:save', async (event, carrierInput) => {
+  const savedCarrier = saveCarrier(carrierInput);
+
+  if (carrierInput.username) {
+    await saveCredential(`${savedCarrier.key}.username`, carrierInput.username);
+  }
+
+  if (carrierInput.password) {
+    await saveCredential(`${savedCarrier.key}.password`, carrierInput.password);
+  }
+
+  return {
+    ok: true,
+    carrier: savedCarrier
+  };
 });
 
 ipcMain.handle('cred:save', async (event, key, value) => {
