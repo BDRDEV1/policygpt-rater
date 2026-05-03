@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PolicyGPT Comparative Rater</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="pgpt-shell">
+    <section class="pgpt-panel">
+      <div class="pgpt-badge">PolicyGPT.com Insurance AI Assistant</div>
+
+      <h1>Comparative Rater Control Center</h1>
+
+      <p class="pgpt-subtitle">
+        Electron desktop app connected to Playwright automation. This starter runs a visible browser so you can watch the quote workflow happen live.
+      </p>
+
+      <div class="pgpt-grid">
+        <div class="pgpt-card">
+          <h2>Demo Automation</h2>
+          <p>
+            Opens a visible browser and fills out a test form. This proves the desktop app can control Playwright.
+          </p>
+          <button id="runDemoBtn">Run Demo Quote</button>
+        </div>
+
+        <div class="pgpt-card">
+          <h2>Status</h2>
+          <p id="statusText">Ready.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./renderer.js"></script>
+</body>
+</html>

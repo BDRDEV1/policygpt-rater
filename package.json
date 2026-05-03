@@ -1,17 +1,16 @@
 {
   "name": "policygpt-rater",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "PolicyGPT.com Comparative Rater desktop app powered by Electron and Playwright.",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "BadDrivingRecord.com Insurance Services Inc",
+  "license": "UNLICENSED",
   "type": "commonjs",
   "dependencies": {
-    "electron": "^41.5.0",
-    "playwright": "^1.59.1"
+    "electron": "^39.2.6",
+    "playwright": "^1.57.0"
   }
 }

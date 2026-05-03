@@ -1,0 +1,14 @@
+{
+  "source": "PolicyGPT.com",
+  "quoteType": "personal_auto",
+  "customer": {
+    "firstName": "Josh",
+    "lastName": "Morrison",
+    "email": "demo@policygpt.com",
+    "phone": "5551234567",
+    "state": "FL"
+  },
+  "drivers": [],
+  "vehicles": [],
+  "notes": "Starter sample quote request for PolicyGPT Comparative Rater."
+}
