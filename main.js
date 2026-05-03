@@ -30,10 +30,12 @@ app.whenReady().then(() => {
 
 ipcMain.handle('quote:runDemo', async () => {
   try {
-    await runDemoQuote();
+    const result = await runDemoQuote();
+
     return {
       ok: true,
-      message: 'Demo quote automation completed.'
+      message: result.result,
+      result
     };
   } catch (error) {
     return {

@@ -1,4 +1,6 @@
 const { chromium } = require('playwright');
+const sampleQuote = require('../shared/sample-quote-request.json');
+const { runDemoCarrier } = require('./carriers/demoCarrier');
 
 async function runDemoQuote() {
   const browser = await chromium.launch({
@@ -15,18 +17,14 @@ async function runDemoQuote() {
 
   const page = await context.newPage();
 
-  await page.goto('https://demoqa.com/automation-practice-form', {
-    waitUntil: 'domcontentloaded'
+  const result = await runDemoCarrier({
+    page,
+    quote: sampleQuote
   });
 
-  await page.fill('#firstName', 'Josh');
-  await page.fill('#lastName', 'Morrison');
-  await page.fill('#userEmail', 'demo@policygpt.com');
-  await page.click('label[for="gender-radio-1"]');
-  await page.fill('#userNumber', '5551234567');
-  await page.fill('#currentAddress', '123 Demo Street, Miami, FL');
+  await page.waitForTimeout(3000);
 
-  await page.waitForTimeout(8000);
+  return result;
 }
 
 module.exports = {
