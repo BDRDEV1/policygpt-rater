@@ -26,6 +26,28 @@
         </div>
 
         <div class="pgpt-card">
+          <h2>Carrier Credentials</h2>
+          <p>
+            Save carrier login credentials securely in Apple Keychain. These are not stored in GitHub.
+          </p>
+
+          <label for="carrierKey">Carrier Key</label>
+          <input id="carrierKey" value="demo" placeholder="example: progressive" />
+
+          <label for="username">Carrier Username</label>
+          <input id="username" placeholder="Carrier Username" />
+
+          <label for="password">Carrier Password</label>
+          <input id="password" type="password" placeholder="Carrier Password" />
+
+          <div class="pgpt-actions">
+            <button id="saveCreds">Save Credentials</button>
+            <button id="loadCreds">Load Credentials</button>
+            <button id="deleteCreds" class="pgpt-danger">Delete Credentials</button>
+          </div>
+        </div>
+
+        <div class="pgpt-card pgpt-status-card">
           <h2>Status</h2>
           <p id="statusText">Ready.</p>
         </div>

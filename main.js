@@ -1,6 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { runDemoQuote } = require('./src/automation/engine');
+const {
+  saveCredential,
+  getCredential,
+  deleteCredential
+} = require('./src/services/credentials');
 
 let mainWindow;
 
@@ -43,6 +48,21 @@ ipcMain.handle('quote:runDemo', async () => {
       message: error.message || 'Automation failed.'
     };
   }
+});
+
+ipcMain.handle('cred:save', async (event, key, value) => {
+  await saveCredential(key, value);
+  return { ok: true };
+});
+
+ipcMain.handle('cred:get', async (event, key) => {
+  const value = await getCredential(key);
+  return value;
+});
+
+ipcMain.handle('cred:delete', async (event, key) => {
+  const deleted = await deleteCredential(key);
+  return { ok: deleted };
 });
 
 app.on('window-all-closed', () => {

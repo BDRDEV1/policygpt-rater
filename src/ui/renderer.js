@@ -1,12 +1,83 @@
 const runDemoBtn = document.getElementById('runDemoBtn');
 const statusText = document.getElementById('statusText');
 
+const carrierKeyInput = document.getElementById('carrierKey');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+
+const saveBtn = document.getElementById('saveCreds');
+const loadBtn = document.getElementById('loadCreds');
+const deleteBtn = document.getElementById('deleteCreds');
+
+function getCarrierKey() {
+  return (carrierKeyInput.value || '').trim().toLowerCase();
+}
+
+function setStatus(message) {
+  statusText.textContent = message;
+}
+
 runDemoBtn.addEventListener('click', async () => {
   runDemoBtn.disabled = true;
-  statusText.textContent = 'Running demo automation...';
+  setStatus('Running demo automation...');
 
   const result = await window.policygptRater.runDemoQuote();
 
-  statusText.textContent = result.message;
+  setStatus(result.message);
   runDemoBtn.disabled = false;
+});
+
+saveBtn.addEventListener('click', async () => {
+  const carrierKey = getCarrierKey();
+
+  if (!carrierKey) {
+    setStatus('Please enter a carrier key.');
+    return;
+  }
+
+  await window.policygptRater.saveCredential(
+    `${carrierKey}.username`,
+    usernameInput.value
+  );
+
+  await window.policygptRater.saveCredential(
+    `${carrierKey}.password`,
+    passwordInput.value
+  );
+
+  setStatus(`Credentials saved securely for ${carrierKey}.`);
+});
+
+loadBtn.addEventListener('click', async () => {
+  const carrierKey = getCarrierKey();
+
+  if (!carrierKey) {
+    setStatus('Please enter a carrier key.');
+    return;
+  }
+
+  const username = await window.policygptRater.getCredential(`${carrierKey}.username`);
+  const password = await window.policygptRater.getCredential(`${carrierKey}.password`);
+
+  usernameInput.value = username || '';
+  passwordInput.value = password || '';
+
+  setStatus(`Credentials loaded for ${carrierKey}.`);
+});
+
+deleteBtn.addEventListener('click', async () => {
+  const carrierKey = getCarrierKey();
+
+  if (!carrierKey) {
+    setStatus('Please enter a carrier key.');
+    return;
+  }
+
+  await window.policygptRater.deleteCredential(`${carrierKey}.username`);
+  await window.policygptRater.deleteCredential(`${carrierKey}.password`);
+
+  usernameInput.value = '';
+  passwordInput.value = '';
+
+  setStatus(`Credentials deleted for ${carrierKey}.`);
 });
