@@ -4,6 +4,10 @@ const panels = document.querySelectorAll('.pgpt-tab-panel');
 const runDemoBtn = document.getElementById('runDemoBtn');
 const statusText = document.getElementById('statusText');
 
+const lineOfBusinessSelect = document.getElementById('lineOfBusiness');
+const matchingCarriersList = document.getElementById('matchingCarriersList');
+const carrierRegistryList = document.getElementById('carrierRegistryList');
+
 const carrierKeyInput = document.getElementById('carrierKey');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
@@ -20,6 +24,66 @@ function getCarrierKey() {
   return (carrierKeyInput.value || '').trim().toLowerCase();
 }
 
+function formatLine(line) {
+  return line
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+function renderMatchingCarriers(carriers) {
+  if (!carriers.length) {
+    matchingCarriersList.innerHTML = '<div>No enabled carriers match this line yet.</div>';
+    return;
+  }
+
+  matchingCarriersList.innerHTML = carriers
+    .map((carrier) => {
+      return `
+        <div class="pgpt-mini-item">
+          <strong>${carrier.name}</strong>
+          <span>${carrier.mode}</span>
+        </div>
+      `;
+    })
+    .join('');
+}
+
+function renderCarrierRegistry(carriers) {
+  const entries = Object.entries(carriers);
+
+  carrierRegistryList.innerHTML = entries
+    .map(([key, carrier]) => {
+      const lines = carrier.lines.map(formatLine).join(', ');
+      const status = carrier.enabled ? 'Enabled' : 'Disabled';
+
+      return `
+        <article class="pgpt-carrier-row">
+          <div>
+            <h3>${carrier.name}</h3>
+            <p><strong>Key:</strong> ${key}</p>
+            <p><strong>Lines:</strong> ${lines}</p>
+            <p><strong>Mode:</strong> ${carrier.mode}</p>
+          </div>
+          <div class="pgpt-carrier-meta">
+            <span>${status}</span>
+            <small>${carrier.loginUrl || 'Login URL not set'}</small>
+          </div>
+        </article>
+      `;
+    })
+    .join('');
+}
+
+async function refreshCarrierViews() {
+  const selectedLine = lineOfBusinessSelect.value;
+  const allCarriers = await window.policygptRater.getAllCarriers();
+  const matchingCarriers = await window.policygptRater.getCarriersForLine(selectedLine);
+
+  renderCarrierRegistry(allCarriers);
+  renderMatchingCarriers(matchingCarriers);
+}
+
 tabs.forEach((tab) => {
   tab.addEventListener('click', () => {
     const target = tab.dataset.tab;
@@ -32,13 +96,19 @@ tabs.forEach((tab) => {
   });
 });
 
+lineOfBusinessSelect.addEventListener('change', refreshCarrierViews);
+
 runDemoBtn.addEventListener('click', async () => {
   runDemoBtn.disabled = true;
-  setStatus('Running demo automation...');
 
-  const result = await window.policygptRater.runDemoQuote();
+  const lineOfBusiness = lineOfBusinessSelect.value;
+  setStatus(`Running demo automation for ${formatLine(lineOfBusiness)}...`);
+
+  const result = await window.policygptRater.runDemoQuote(lineOfBusiness);
 
   setStatus(result.message);
+  await refreshCarrierViews();
+
   runDemoBtn.disabled = false;
 });
 
@@ -96,3 +166,5 @@ deleteBtn.addEventListener('click', async () => {
 
   setStatus(`Credentials deleted for ${carrierKey}.`);
 });
+
+refreshCarrierViews();
