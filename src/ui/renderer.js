@@ -1,3 +1,6 @@
+const tabs = document.querySelectorAll('.pgpt-tab');
+const panels = document.querySelectorAll('.pgpt-tab-panel');
+
 const runDemoBtn = document.getElementById('runDemoBtn');
 const statusText = document.getElementById('statusText');
 
@@ -9,13 +12,25 @@ const saveBtn = document.getElementById('saveCreds');
 const loadBtn = document.getElementById('loadCreds');
 const deleteBtn = document.getElementById('deleteCreds');
 
+function setStatus(message) {
+  statusText.textContent = message;
+}
+
 function getCarrierKey() {
   return (carrierKeyInput.value || '').trim().toLowerCase();
 }
 
-function setStatus(message) {
-  statusText.textContent = message;
-}
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.tab;
+
+    tabs.forEach((item) => item.classList.remove('active'));
+    panels.forEach((panel) => panel.classList.remove('active'));
+
+    tab.classList.add('active');
+    document.getElementById(target).classList.add('active');
+  });
+});
 
 runDemoBtn.addEventListener('click', async () => {
   runDemoBtn.disabled = true;

@@ -154,3 +154,42 @@ input:focus {
 .pgpt-status-card {
   grid-column: 1 / -1;
 }
+
+.pgpt-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 24px 0 22px;
+  padding: 8px;
+  border-radius: 999px;
+  background: rgba(7, 9, 14, .66);
+  border: 1px solid rgba(255,255,255,.11);
+}
+
+.pgpt-tab {
+  margin: 0;
+  color: rgba(255,255,255,.82);
+  background: rgba(255,255,255,.06);
+  box-shadow: none;
+}
+
+.pgpt-tab.active {
+  color: #041018;
+  background: linear-gradient(135deg, #67bef5, #32A4EF);
+  box-shadow: 0 0 24px rgba(50,164,239,.35);
+}
+
+.pgpt-tab-panel {
+  display: none;
+}
+
+.pgpt-tab-panel.active {
+  display: block;
+}
+
+.pgpt-placeholder-list {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+  color: rgba(255,255,255,.84);
+}
