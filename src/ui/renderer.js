@@ -289,3 +289,19 @@ deleteBtn.addEventListener('click', async () => {
 });
 
 refreshCarrierViews();
+
+// --- AI Startup Sound ---
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const audio = new Audio('../assets/audio/ai_startup.mp3');
+    audio.volume = 0.6; // adjust volume here (0.0 - 1.0)
+    
+    // Play once
+    audio.play().catch(() => {
+      // Some systems block autoplay — this prevents errors
+      console.log('Audio autoplay blocked');
+    });
+  } catch (err) {
+    console.log('Audio error:', err);
+  }
+});
