@@ -1,17 +1,1 @@
-{
-  "amwins_admitted": {
-    "name": "Amwins Admitted",
-    "enabled": true,
-    "loginUrl": "https://myagency.amwinsadmittedplacement.com/auth/login",
-    "quoteUrl": "https://myagency.amwinsadmittedplacement.com/auth/login",
-    "lines": [
-      "personal_auto",
-      "commercial_auto",
-      "workers_comp",
-      "general_liability",
-      "business_owners_policy",
-      "renters"
-    ],
-    "mode": "submission"
-  }
-}
+{}

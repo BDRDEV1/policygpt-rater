@@ -9,26 +9,23 @@ function readCarriers() {
   }
 
   const raw = fs.readFileSync(CARRIERS_PATH, 'utf8');
-  return JSON.parse(raw);
+  return JSON.parse(raw || '{}');
 }
 
 function writeCarriers(carriers) {
   fs.writeFileSync(CARRIERS_PATH, JSON.stringify(carriers, null, 2));
 }
 
-function getAllCarriers() {
-  return readCarriers();
+function normalizeCarrierKey(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
 }
 
-function getEnabledCarriers() {
-  const carriers = readCarriers();
-
-  return Object.entries(carriers)
-    .filter(([, carrier]) => carrier.enabled)
-    .reduce((acc, [key, carrier]) => {
-      acc[key] = carrier;
-      return acc;
-    }, {});
+function getAllCarriers() {
+  return readCarriers();
 }
 
 function getCarriersForLine(lineOfBusiness) {
@@ -39,19 +36,15 @@ function getCarriersForLine(lineOfBusiness) {
       return carrier.enabled && Array.isArray(carrier.lines) && carrier.lines.includes(lineOfBusiness);
     })
     .map(([key, carrier]) => {
+      const workflow = carrier.lineWorkflows?.[lineOfBusiness] || {};
+
       return {
         key,
-        ...carrier
+        ...carrier,
+        activeQuoteUrl: workflow.quoteUrl || carrier.quoteUrl || '',
+        activeMode: workflow.mode || carrier.mode || 'realtime'
       };
     });
-}
-
-function normalizeCarrierKey(value) {
-  return String(value || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
 }
 
 function saveCarrier(carrierInput) {
@@ -70,13 +63,25 @@ function saveCarrier(carrierInput) {
         .map((line) => line.trim())
         .filter(Boolean);
 
+  const lineWorkflows = {};
+
+  lines.forEach((line) => {
+    const workflow = carrierInput.lineWorkflows?.[line] || {};
+
+    lineWorkflows[line] = {
+      quoteUrl: workflow.quoteUrl || carrierInput.quoteUrl || '',
+      mode: workflow.mode || carrierInput.mode || 'realtime'
+    };
+  });
+
   carriers[key] = {
     name: carrierInput.name || key,
     enabled: carrierInput.enabled !== false,
     loginUrl: carrierInput.loginUrl || '',
     quoteUrl: carrierInput.quoteUrl || '',
     lines,
-    mode: carrierInput.mode || 'realtime'
+    mode: carrierInput.mode || 'realtime',
+    lineWorkflows
   };
 
   writeCarriers(carriers);
@@ -89,7 +94,6 @@ function saveCarrier(carrierInput) {
 
 module.exports = {
   getAllCarriers,
-  getEnabledCarriers,
   getCarriersForLine,
   saveCarrier,
   normalizeCarrierKey

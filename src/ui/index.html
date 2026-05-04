@@ -63,37 +63,68 @@
           <div class="pgpt-card">
             <h2>Add Carrier</h2>
             <p>
-              Add carrier settings and credentials in one step. URLs and carrier rules are saved in the carrier registry. Username and password are saved securely in Apple Keychain.
+              Add carrier settings and credentials in one step. General quote URL is optional. Per-line quote URLs let carriers like Amwins use different submission pages for different insurance lines.
             </p>
 
             <label for="newCarrierName">Carrier Name</label>
-            <input id="newCarrierName" placeholder="Example: Progressive" />
+            <input id="newCarrierName" placeholder="Example: Amwins" />
 
             <label for="newCarrierKey">Carrier Key</label>
-            <input id="newCarrierKey" placeholder="example: progressive" />
+            <input id="newCarrierKey" placeholder="example: amwins" />
 
             <label for="newCarrierLoginUrl">Login URL</label>
             <input id="newCarrierLoginUrl" placeholder="https://carrier-login-url.com" />
 
-            <label for="newCarrierQuoteUrl">Quote URL</label>
-            <input id="newCarrierQuoteUrl" placeholder="https://carrier-quote-url.com" />
+            <label for="newCarrierQuoteUrl">Fallback Quote URL</label>
+            <input id="newCarrierQuoteUrl" placeholder="Used only if a line-specific URL is blank" />
 
-            <label for="newCarrierMode">Quote Mode</label>
+            <label for="newCarrierMode">Fallback Quote Mode</label>
             <select id="newCarrierMode">
               <option value="realtime">Real-Time Quote</option>
               <option value="submission">Underwriting Submission</option>
             </select>
 
-            <label>Lines of Business</label>
-            <div class="pgpt-checkbox-grid">
-              <label><input type="checkbox" class="newCarrierLine" value="personal_auto" /> Personal Auto</label>
-              <label><input type="checkbox" class="newCarrierLine" value="commercial_auto" /> Commercial Auto</label>
-              <label><input type="checkbox" class="newCarrierLine" value="workers_comp" /> Workers Comp</label>
-              <label><input type="checkbox" class="newCarrierLine" value="general_liability" /> General Liability</label>
-              <label><input type="checkbox" class="newCarrierLine" value="business_owners_policy" /> Business Owners Policy</label>
-              <label><input type="checkbox" class="newCarrierLine" value="renters" /> Renters</label>
-              <label><input type="checkbox" class="newCarrierLine" value="flood" /> Flood</label>
-              <label><input type="checkbox" class="newCarrierLine" value="cyber_liability" /> Cyber Liability</label>
+            <label>Lines of Business + Quote URLs</label>
+            <div class="pgpt-line-workflows">
+              <div class="pgpt-line-row" data-line="personal_auto">
+                <label><input type="checkbox" class="newCarrierLine" value="personal_auto" /> Personal Auto</label>
+                <input class="lineQuoteUrl" data-line="personal_auto" placeholder="Personal Auto quote URL" />
+              </div>
+
+              <div class="pgpt-line-row" data-line="commercial_auto">
+                <label><input type="checkbox" class="newCarrierLine" value="commercial_auto" /> Commercial Auto</label>
+                <input class="lineQuoteUrl" data-line="commercial_auto" placeholder="Commercial Auto quote URL" />
+              </div>
+
+              <div class="pgpt-line-row" data-line="workers_comp">
+                <label><input type="checkbox" class="newCarrierLine" value="workers_comp" /> Workers Comp</label>
+                <input class="lineQuoteUrl" data-line="workers_comp" placeholder="Workers Comp submission URL" />
+              </div>
+
+              <div class="pgpt-line-row" data-line="general_liability">
+                <label><input type="checkbox" class="newCarrierLine" value="general_liability" /> General Liability</label>
+                <input class="lineQuoteUrl" data-line="general_liability" placeholder="General Liability submission URL" />
+              </div>
+
+              <div class="pgpt-line-row" data-line="business_owners_policy">
+                <label><input type="checkbox" class="newCarrierLine" value="business_owners_policy" /> Business Owners Policy</label>
+                <input class="lineQuoteUrl" data-line="business_owners_policy" placeholder="BOP submission URL" />
+              </div>
+
+              <div class="pgpt-line-row" data-line="renters">
+                <label><input type="checkbox" class="newCarrierLine" value="renters" /> Renters</label>
+                <input class="lineQuoteUrl" data-line="renters" placeholder="Renters quote URL" />
+              </div>
+
+              <div class="pgpt-line-row" data-line="flood">
+                <label><input type="checkbox" class="newCarrierLine" value="flood" /> Flood</label>
+                <input class="lineQuoteUrl" data-line="flood" placeholder="Flood quote URL" />
+              </div>
+
+              <div class="pgpt-line-row" data-line="cyber_liability">
+                <label><input type="checkbox" class="newCarrierLine" value="cyber_liability" /> Cyber Liability</label>
+                <input class="lineQuoteUrl" data-line="cyber_liability" placeholder="Cyber Liability submission URL" />
+              </div>
             </div>
 
             <label for="newCarrierUsername">Username</label>
@@ -129,7 +160,7 @@
           </p>
 
           <label for="carrierKey">Carrier Key</label>
-          <input id="carrierKey" value="demo" placeholder="example: progressive" />
+          <input id="carrierKey" value="demo" placeholder="example: amwins" />
 
           <label for="username">Carrier Username</label>
           <input id="username" placeholder="Carrier Username" />

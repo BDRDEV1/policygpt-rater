@@ -54,6 +54,21 @@ function getSelectedNewCarrierLines() {
     .map((input) => input.value);
 }
 
+function getLineWorkflows(lines) {
+  const workflows = {};
+
+  lines.forEach((line) => {
+    const input = document.querySelector(`.lineQuoteUrl[data-line="${line}"]`);
+
+    workflows[line] = {
+      quoteUrl: input ? input.value.trim() : '',
+      mode: newCarrierModeInput.value
+    };
+  });
+
+  return workflows;
+}
+
 function clearNewCarrierForm() {
   newCarrierNameInput.value = '';
   newCarrierKeyInput.value = '';
@@ -66,6 +81,10 @@ function clearNewCarrierForm() {
 
   document.querySelectorAll('.newCarrierLine').forEach((input) => {
     input.checked = false;
+  });
+
+  document.querySelectorAll('.lineQuoteUrl').forEach((input) => {
+    input.value = '';
   });
 }
 
@@ -80,7 +99,8 @@ function renderMatchingCarriers(carriers) {
       return `
         <div class="pgpt-mini-item">
           <strong>${carrier.name}</strong>
-          <span>${carrier.mode}</span>
+          <span>${carrier.activeMode}</span>
+          <small>${carrier.activeQuoteUrl || 'No quote URL set'}</small>
         </div>
       `;
     })
@@ -100,18 +120,32 @@ function renderCarrierRegistry(carriers) {
       const lines = Array.isArray(carrier.lines) ? carrier.lines.map(formatLine).join(', ') : '';
       const status = carrier.enabled ? 'Enabled' : 'Disabled';
 
+      const workflowRows = Object.entries(carrier.lineWorkflows || {})
+        .map(([line, workflow]) => {
+          return `
+            <div class="pgpt-workflow-row">
+              <strong>${formatLine(line)}</strong>
+              <span>${workflow.mode || carrier.mode}</span>
+              <small>${workflow.quoteUrl || carrier.quoteUrl || 'No quote URL set'}</small>
+            </div>
+          `;
+        })
+        .join('');
+
       return `
         <article class="pgpt-carrier-row">
           <div>
             <h3>${carrier.name}</h3>
             <p><strong>Key:</strong> ${key}</p>
             <p><strong>Lines:</strong> ${lines || 'No lines selected'}</p>
-            <p><strong>Mode:</strong> ${carrier.mode}</p>
-            <p><strong>Quote URL:</strong> ${carrier.quoteUrl || 'Not set'}</p>
+            <p><strong>Login URL:</strong> ${carrier.loginUrl || 'Not set'}</p>
+            <div class="pgpt-workflow-list">
+              ${workflowRows || '<small>No line workflows set.</small>'}
+            </div>
           </div>
           <div class="pgpt-carrier-meta">
             <span>${status}</span>
-            <small>${carrier.loginUrl || 'Login URL not set'}</small>
+            <small>${carrier.mode || 'realtime'}</small>
           </div>
         </article>
       `;
@@ -171,6 +205,7 @@ saveCarrierBtn.addEventListener('click', async () => {
     mode: newCarrierModeInput.value,
     enabled: newCarrierEnabledInput.checked,
     lines,
+    lineWorkflows: getLineWorkflows(lines),
     username: newCarrierUsernameInput.value.trim(),
     password: newCarrierPasswordInput.value
   });

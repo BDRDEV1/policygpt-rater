@@ -394,3 +394,70 @@ select:focus {
 .pgpt-inline-check {
   margin-top: 16px;
 }
+
+.pgpt-line-workflows {
+  display: grid;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.pgpt-line-row {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.pgpt-line-row label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: rgba(255,255,255,.84);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pgpt-line-row input[type="checkbox"] {
+  width: auto;
+}
+
+.pgpt-workflow-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pgpt-workflow-row {
+  display: grid;
+  grid-template-columns: 160px 90px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.pgpt-workflow-row span {
+  color: #67bef5;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.pgpt-workflow-row small,
+.pgpt-mini-item small {
+  color: rgba(255,255,255,.64);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 850px) {
+  .pgpt-line-row,
+  .pgpt-workflow-row {
+    grid-template-columns: 1fr;
+  }
+}
