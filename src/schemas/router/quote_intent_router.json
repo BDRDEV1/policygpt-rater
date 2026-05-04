@@ -1,0 +1,138 @@
+{
+  "schema_id": "quote_intent_router",
+  "display_name": "Quote Intent Router",
+  "purpose": "Detect what the customer wants before loading any insurance-specific intake schema.",
+  "intents": [
+    "quote_request",
+    "policy_question",
+    "policy_change",
+    "claims_help",
+    "billing_help",
+    "document_upload",
+    "other"
+  ],
+  "line_of_business_options": [
+    "personal_auto",
+    "commercial_auto",
+    "general_liability",
+    "workers_comp",
+    "professional_liability",
+    "cyber_liability",
+    "renters",
+    "flood",
+    "other",
+    "unknown"
+  ],
+  "routing_status_options": [
+    "needs_line_selection",
+    "needs_more_info",
+    "ready_for_schema",
+    "not_a_quote_request"
+  ],
+  "rules": [
+    {
+      "name": "generic_quote_request",
+      "description": "If the customer asks for a quote but does not specify the insurance type, ask them to select a line of insurance.",
+      "examples": [
+        "I need a quote",
+        "Can I get qot",
+        "Need insurance quote",
+        "How much is insurance?"
+      ],
+      "result": {
+        "intent": "quote_request",
+        "line_of_business": "unknown",
+        "routing_status": "needs_line_selection",
+        "next_question": "Absolutely — what type of insurance quote do you need today?"
+      }
+    },
+    {
+      "name": "known_line_quote_request",
+      "description": "If the customer clearly names the insurance type, route to that line.",
+      "examples": [
+        "I need cyber insurance",
+        "I need a workers comp quote",
+        "I need general liability",
+        "I need renters insurance"
+      ],
+      "result": {
+        "intent": "quote_request",
+        "routing_status": "ready_for_schema"
+      }
+    },
+    {
+      "name": "cyber_quote_request",
+      "description": "If the customer asks for cyber liability, do not start the full intake immediately. Route to cyber tier router first.",
+      "examples": [
+        "I need cyber insurance",
+        "Cyber liability quote",
+        "Data breach insurance",
+        "Cyber coverage for my business"
+      ],
+      "result": {
+        "intent": "quote_request",
+        "line_of_business": "cyber_liability",
+        "routing_status": "needs_more_info",
+        "next_schema": "cyber_tier_router"
+      }
+    }
+  ],
+  "line_selection_prompt": {
+    "question": "Absolutely — what type of insurance quote do you need today?",
+    "options": [
+      {
+        "label": "Personal Auto",
+        "value": "personal_auto"
+      },
+      {
+        "label": "Commercial Auto",
+        "value": "commercial_auto"
+      },
+      {
+        "label": "General Liability",
+        "value": "general_liability"
+      },
+      {
+        "label": "Workers Comp",
+        "value": "workers_comp"
+      },
+      {
+        "label": "Professional Liability / E&O",
+        "value": "professional_liability"
+      },
+      {
+        "label": "Cyber Liability",
+        "value": "cyber_liability"
+      },
+      {
+        "label": "Renters",
+        "value": "renters"
+      },
+      {
+        "label": "Flood",
+        "value": "flood"
+      },
+      {
+        "label": "Other",
+        "value": "other"
+      }
+    ]
+  },
+  "gemini_behavior_rules": [
+    "Do not start underwriting questions until quote intent and line_of_business are known.",
+    "If the customer asks for a quote but line_of_business is unknown, ask the line_selection_prompt.",
+    "If the customer types a misspelled quote request such as qot, qoute, ins quote, or need quote, treat it as quote_request.",
+    "If the line is cyber_liability, route to cyber_tier_router before loading a cyber intake schema.",
+    "If the customer selects Other, ask what they are trying to insure and route manually if possible.",
+    "Do not invent insurance lines that are not in line_of_business_options."
+  ],
+  "output_contract": {
+    "intent": "",
+    "line_of_business": "",
+    "routing_status": "",
+    "next_question": "",
+    "next_schema": "",
+    "confidence": 0,
+    "notes": ""
+  }
+}
