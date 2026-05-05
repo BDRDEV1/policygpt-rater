@@ -2,33 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>PolicyGPT Comparative Rater</title>
+  <title>Flux Comparative Rater</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <main class="pgpt-shell">
     <section class="pgpt-panel">
-      <div class="pgpt-badge">PolicyGPT.com Insurance AI Assistant</div>
+      <header class="flux-topbar">
+        <div class="flux-logo-wrap">
+          <video class="flux-logo-video" autoplay muted loop playsinline>
+            <source src="../assets/video/flux-comparative-rater-logo.webm" type="video/webm" />
+          </video>
+        </div>
 
-      <h1>Comparative Rater Control Center</h1>
-
-      <p class="pgpt-subtitle">
-        Electron desktop app connected to Playwright automation. Run quote jobs, manage carriers, securely save credentials, and prepare carrier submissions.
-      </p>
+        <div class="flux-title-wrap">
+          <h1>Control Center</h1>
+          <p class="pgpt-subtitle">
+            <strong>Welcome To Flux AI Comparative Rater</strong> - Run quote jobs, manage carriers, securely save credentials, and prepare carrier submissions.
+          </p>
+        </div>
+      </header>
 
       <nav class="pgpt-tabs">
         <button class="pgpt-tab active" data-tab="dashboard">Dashboard</button>
+        <button class="pgpt-tab" data-tab="recentJobs">Recent Jobs</button>
         <button class="pgpt-tab" data-tab="carriers">Carriers</button>
         <button class="pgpt-tab" data-tab="credentials">Credentials</button>
+        <button class="pgpt-tab" data-tab="aiSettings">AI Settings</button>
+        <button class="pgpt-tab" data-tab="webhooks">Webhooks</button>
         <button class="pgpt-tab" data-tab="settings">Settings</button>
       </nav>
 
       <section id="dashboard" class="pgpt-tab-panel active">
         <div class="pgpt-grid">
-          <div class="pgpt-card">
+          <div class="pgpt-card pgpt-card-blue">
             <h2>Run Quote Job</h2>
             <p>
-              Select a line of business. The rater will only use enabled carriers that support that line.
+              Select a line of business. Flux will only use enabled carriers that support that line.
             </p>
 
             <label for="lineOfBusiness">Line of Business</label>
@@ -46,14 +56,41 @@
             <button id="runDemoBtn">Run Demo Quote</button>
           </div>
 
-          <div class="pgpt-card">
+          <div class="pgpt-card pgpt-card-blue">
             <h2>Matching Carriers</h2>
             <div id="matchingCarriersList" class="pgpt-mini-list">Choose a line of business.</div>
           </div>
 
           <div class="pgpt-card pgpt-status-card">
             <h2>Quote Job Status</h2>
+
+            <div class="flux-progress-wrap">
+              <div class="flux-progress-top">
+                <span id="progressLabel">Waiting for job</span>
+                <span id="progressPercent">0%</span>
+              </div>
+              <div class="flux-progress-track">
+                <div id="progressBar" class="flux-progress-bar"></div>
+              </div>
+            </div>
+
             <p id="statusText">Ready.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="recentJobs" class="pgpt-tab-panel">
+        <div class="pgpt-card">
+          <h2>Recent Jobs</h2>
+          <p>
+            This will show the last 25 quote jobs with carrier status, line of business, result, and PDF availability.
+          </p>
+
+          <div class="flux-job-list">
+            <div class="flux-job-row">
+              <strong>No jobs yet</strong>
+              <span>Run a quote job to populate this list.</span>
+            </div>
           </div>
         </div>
       </section>
@@ -63,7 +100,7 @@
           <div class="pgpt-card">
             <h2>Add Carrier</h2>
             <p>
-              Add carrier settings and credentials in one step. General quote URL is optional. Per-line quote URLs let carriers like Amwins use different submission pages for different insurance lines.
+              Add carrier settings and credentials in one step. General quote URL is optional. Per-line quote URLs let carriers use different submission pages for different insurance lines.
             </p>
 
             <label for="newCarrierName">Carrier Name</label>
@@ -90,37 +127,30 @@
                 <label><input type="checkbox" class="newCarrierLine" value="personal_auto" /> Personal Auto</label>
                 <input class="lineQuoteUrl" data-line="personal_auto" placeholder="Personal Auto quote URL" />
               </div>
-
               <div class="pgpt-line-row" data-line="commercial_auto">
                 <label><input type="checkbox" class="newCarrierLine" value="commercial_auto" /> Commercial Auto</label>
                 <input class="lineQuoteUrl" data-line="commercial_auto" placeholder="Commercial Auto quote URL" />
               </div>
-
               <div class="pgpt-line-row" data-line="workers_comp">
                 <label><input type="checkbox" class="newCarrierLine" value="workers_comp" /> Workers Comp</label>
                 <input class="lineQuoteUrl" data-line="workers_comp" placeholder="Workers Comp submission URL" />
               </div>
-
               <div class="pgpt-line-row" data-line="general_liability">
                 <label><input type="checkbox" class="newCarrierLine" value="general_liability" /> General Liability</label>
                 <input class="lineQuoteUrl" data-line="general_liability" placeholder="General Liability submission URL" />
               </div>
-
               <div class="pgpt-line-row" data-line="business_owners_policy">
                 <label><input type="checkbox" class="newCarrierLine" value="business_owners_policy" /> Business Owners Policy</label>
                 <input class="lineQuoteUrl" data-line="business_owners_policy" placeholder="BOP submission URL" />
               </div>
-
               <div class="pgpt-line-row" data-line="renters">
                 <label><input type="checkbox" class="newCarrierLine" value="renters" /> Renters</label>
                 <input class="lineQuoteUrl" data-line="renters" placeholder="Renters quote URL" />
               </div>
-
               <div class="pgpt-line-row" data-line="flood">
                 <label><input type="checkbox" class="newCarrierLine" value="flood" /> Flood</label>
                 <input class="lineQuoteUrl" data-line="flood" placeholder="Flood quote URL" />
               </div>
-
               <div class="pgpt-line-row" data-line="cyber_liability">
                 <label><input type="checkbox" class="newCarrierLine" value="cyber_liability" /> Cyber Liability</label>
                 <input class="lineQuoteUrl" data-line="cyber_liability" placeholder="Cyber Liability submission URL" />
@@ -143,10 +173,7 @@
 
           <div class="pgpt-card">
             <h2>Carrier Registry</h2>
-            <p>
-              Non-secret carrier settings live here. Passwords stay in Apple Keychain.
-            </p>
-
+            <p>Non-secret carrier settings live here. Passwords stay in Apple Keychain.</p>
             <div id="carrierRegistryList" class="pgpt-carrier-list"></div>
           </div>
         </div>
@@ -155,9 +182,7 @@
       <section id="credentials" class="pgpt-tab-panel">
         <div class="pgpt-card">
           <h2>Carrier Credentials</h2>
-          <p>
-            Save or update carrier login credentials securely in Apple Keychain.
-          </p>
+          <p>Save or update carrier login credentials securely in Apple Keychain.</p>
 
           <label for="carrierKey">Carrier Key</label>
           <input id="carrierKey" value="demo" placeholder="example: amwins" />
@@ -176,11 +201,29 @@
         </div>
       </section>
 
+      <section id="aiSettings" class="pgpt-tab-panel">
+        <div class="pgpt-card">
+          <h2>AI Settings</h2>
+          <p>
+            Future controls for Gemini model settings, schema routing, memory behavior, quote-intake prompts, and agent-review thresholds.
+          </p>
+        </div>
+      </section>
+
+      <section id="webhooks" class="pgpt-tab-panel">
+        <div class="pgpt-card">
+          <h2>Webhooks</h2>
+          <p>
+            Future controls for PolicyGPT portal webhook URL, Cloud Run endpoints, Salesforce callback URLs, quote result callbacks, and HMAC settings.
+          </p>
+        </div>
+      </section>
+
       <section id="settings" class="pgpt-tab-panel">
         <div class="pgpt-card">
-          <h2>System Settings</h2>
+          <h2>App Settings</h2>
           <p>
-            Later this will hold PolicyGPT portal webhook settings, Cloud Run endpoint settings, Salesforce sync settings, and app preferences.
+            Future app preferences, display settings, storage paths, download folders, and local automation settings.
           </p>
         </div>
       </section>

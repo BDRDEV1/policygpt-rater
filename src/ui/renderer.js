@@ -3,6 +3,9 @@ const panels = document.querySelectorAll('.pgpt-tab-panel');
 
 const runDemoBtn = document.getElementById('runDemoBtn');
 const statusText = document.getElementById('statusText');
+const progressLabel = document.getElementById('progressLabel');
+const progressPercent = document.getElementById('progressPercent');
+const progressBar = document.getElementById('progressBar');
 
 const lineOfBusinessSelect = document.getElementById('lineOfBusiness');
 const matchingCarriersList = document.getElementById('matchingCarriersList');
@@ -28,6 +31,12 @@ const saveCarrierBtn = document.getElementById('saveCarrierBtn');
 
 function setStatus(message) {
   statusText.textContent = message;
+}
+
+function setProgress(percent, label) {
+  if (progressBar) progressBar.style.width = `${percent}%`;
+  if (progressPercent) progressPercent.textContent = `${percent}%`;
+  if (progressLabel) progressLabel.textContent = label;
 }
 
 function getCarrierKey() {
@@ -224,10 +233,12 @@ runDemoBtn.addEventListener('click', async () => {
 
   const lineOfBusiness = lineOfBusinessSelect.value;
   setStatus(`Running demo automation for ${formatLine(lineOfBusiness)}...`);
+  setProgress(35, 'Launching browser and matching carriers');
 
   const result = await window.policygptRater.runDemoQuote(lineOfBusiness);
 
   setStatus(result.message);
+  setProgress(100, 'Demo quote job complete');
   await refreshCarrierViews();
 
   runDemoBtn.disabled = false;
@@ -289,19 +300,3 @@ deleteBtn.addEventListener('click', async () => {
 });
 
 refreshCarrierViews();
-
-// --- AI Startup Sound ---
-window.addEventListener('DOMContentLoaded', () => {
-  try {
-    const audio = new Audio('../assets/audio/ai_startup.mp3');
-    audio.volume = 0.6; // adjust volume here (0.0 - 1.0)
-    
-    // Play once
-    audio.play().catch(() => {
-      // Some systems block autoplay — this prevents errors
-      console.log('Audio autoplay blocked');
-    });
-  } catch (err) {
-    console.log('Audio error:', err);
-  }
-});
